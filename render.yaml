@@ -1,0 +1,25 @@
+# Render Blueprint for the backend API.
+# Deploy via https://dashboard.render.com/blueprints (New + > Blueprint),
+# pointing it at this repo. Render auto-injects PORT — do not set it manually.
+# GEMINI_API_KEY and CORS_ORIGIN are marked sync: false, so Render will
+# prompt for them in the dashboard instead of storing them in this file.
+services:
+  - type: web
+    name: groweasy-import-api
+    runtime: node
+    rootDir: backend
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: GEMINI_MODEL
+        value: gemini-flash-latest
+      - key: CORS_ORIGIN
+        sync: false
+      - key: MAX_UPLOAD_SIZE_MB
+        value: "10"
+      - key: CSV_BATCH_SIZE
+        value: "30"
